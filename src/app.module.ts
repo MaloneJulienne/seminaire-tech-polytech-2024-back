@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TypeormModule } from './config/typeorm/typeorm.module';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
+import ClaudeModule from './claude/claude.module';
+import FilmSynopsisModule from './film-synopsis/film-synopsis.module';
+import { AwsModule } from './aws/aws.module';
 
 @Module({
-  imports: [TypeormModule, UserModule, AuthModule],
+  imports: [ClaudeModule, FilmSynopsisModule, AwsModule],
   controllers: [],
   providers: [],
 })
