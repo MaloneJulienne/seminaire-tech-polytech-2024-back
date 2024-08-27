@@ -16,7 +16,11 @@ export default class ClaudeService {
     this.bedrockRuntimeClient = this.awsConfigService.getBedrockClient();
   }
 
-  async invokeClaude(modelId: string, prompt: string, userMessage: string) {
+  async invokeClaude(
+    modelId: string,
+    prompt: string,
+    userMessage: string,
+  ): Promise<string> {
     try {
       const converseCommandConfig: ConverseCommandInput =
         this.createClaudeConfiguration(modelId, prompt, userMessage);
