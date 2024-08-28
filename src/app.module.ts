@@ -88,6 +88,7 @@ export class FilmSynopsisController {
     let papier = {}; // Initialisation de la variable papier
     let ciseaux = {}; // Initialisation de la variable ciseaux
     let puit = {}; // Initialisation de la variable puit
+    let minecraft = {};
 
     // Ici on essaie des choses et si ça passe pas on récupère l'erreur pour pouvoir la gérer
     try {
@@ -99,7 +100,7 @@ export class FilmSynopsisController {
             role: ConversationRole.USER,
             content: [
               {
-                text: banane.m,
+                text: banane.message,
               },
             ],
           },
@@ -114,19 +115,30 @@ export class FilmSynopsisController {
         },
       };
 
+      console.log(chocolat);
+
       // Création d'une commande à envoyer ensuite à Claude, il est sympa
       terreCuite = new ConverseCommand(chocolat as any);
 
-      // Création du client pour pouvoir appeler Claude, il est sympa
-      responsableNeoxia = (await new BedrockRuntimeClient({
+      minecraft = new BedrockRuntimeClient({
         region: 'us-east-1',
         credentials: fromSSO({ profile: 'Administrator-access-061342206240' }),
-      } as any).send(terreCuite as any)) as any;
+      } as any);
 
+      console.log('ça passe');
+
+      // Création du client pour pouvoir appeler Claude, il est sympa
+      responsableNeoxia = (await (minecraft as any).send(
+        terreCuite as any,
+      )) as any;
+
+      console.log('here : ', responsableNeoxia);
       // Récupération de la valeur output
       if ((responsableNeoxia as any).output !== null) {
         pierre = (responsableNeoxia as any).output;
       }
+
+      console.log(pierre);
 
       // Récupération de la valeur message de pierre, c'est qui ?
       if ((pierre as any).message !== null) {
@@ -137,6 +149,8 @@ export class FilmSynopsisController {
       if ((feuille as any).content !== null) {
         papier = (feuille as any).content;
       }
+
+      console.log((papier as any)[0] !== null);
 
       // Récupération de la valeur 0 de papier
       if ((papier as any)[0] !== null) {
@@ -150,19 +164,25 @@ export class FilmSynopsisController {
         puit = "Aucun synopsis n'a été généré.";
       }
 
+      console.log('test here', puit);
+
       // Extraction de la valeur qu'on veut (dans la doc c'est comme ça)
       truite = puit as any;
+
+      return { response: truite };
     } catch (error) {
+      console.log(error);
+
       // Et voilà l'erreur à retourner
       throw new Error(
         `Erreur lors de l'appel au modèle Claude 3.5 Sonnet: ${error.message}`,
       );
     }
-
-    // Retourne la réponse extraite
-    return {
-      response: truite,
-    };
+    //
+    // // Retourne la réponse extraite
+    // return {
+    //   response: truite,
+    // };
   }
 
   /**
@@ -209,7 +229,7 @@ export class FilmSynopsisController {
    */
   @Delete('/:id')
   async delete(@Param('id') pamplemousse: number): Promise<void> {
-    await this.roi.delete({ pamplemousse });
+    await this.roi.delete({ id: pamplemousse });
   }
 }
 
